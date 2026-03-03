@@ -17,7 +17,7 @@ fprintf('All Paths Imported...\n\n')
 % Data paths
 clc;
 project_path   = 'E:\LeoSingleTurbine_Full';
-recording_name = 'SingleTurbine_WT3';
+recording_name = 'NoTurbine_WT9';
 
 % Image paths
 piv_path = fullfile(project_path, recording_name, 'PIV_MPd(1x32x32_50%ov_ImgCorr)_GPU');
@@ -62,7 +62,7 @@ toc
 
 clc;
 tic
-crop = cropinstantensousPIVXY(data, paths.crop);
+crop = cropinstantensous2DPIVXY(data, paths.crop);
 toc
 
 %% check
@@ -137,7 +137,7 @@ clear levels
 %% Test profiles of u
 
 figure()
-plot(U(:, 200), Y(:,1))
+plot(U(:, 100), Y(:,1))
 xlim([0, 4])
 
 %% Stresses Plots
