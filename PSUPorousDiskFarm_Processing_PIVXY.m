@@ -43,7 +43,7 @@ paths     = savepaths(save_path, recording_name);
 
 clc;
 tic
-data = vector2matlabPIVXY(piv_path, paths.data);
+data = vector2matlab2DPIVXY(piv_path, paths.data);
 toc
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -67,14 +67,14 @@ toc
 
 %% check
 
-f = 1;
+f = 100;
 figure()
 hold on
 contourf(crop.X, crop.Y, crop.U(:, :, f), 100, 'linestyle', 'none')
 hold off
 axis equal
 colorbar()
-% clim([-1, 1])
+clim([0, inf])
 % xline(60)
 clear f
 
@@ -84,15 +84,15 @@ clear f
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clc;
-% if exist(paths.means, 'file')
-%      fprintf('* Loading MEANS from File\n')
-%      means = load(paths.means); 
-%      means = means.output;
-% else
-%      means = data2meansPIVXY(wavecrop, paths.means);
-% end
+if exist(paths.means, 'file')
+     fprintf('* Loading MEANS from File\n')
+     means = load(paths.means); 
+     means = means.output;
+else
+     means = data2means2DPIVXY(crop, paths.means);
+end
 
-means = data2meansPIVXY(wavecrop, paths.means);
+% means = data2meansPIVXY(crop, paths.means);
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PLOTS
@@ -103,34 +103,16 @@ Y = means.Y;
 
 U = means.u;
 V = means.v;
-W = means.w;
 
 uu = means.uu;
 vv = means.vv;
-ww = means.ww;
-
 uv = means.uv;
-uw = means.uw;
-vw = means.vw;
-
-max_wave_profile = max(rerefined_waves, [], 1);
-U(Y < max_wave_profile) = nan;
-V(Y < max_wave_profile) = nan;
-W(Y < max_wave_profile) = nan;
-
-uu(Y < max_wave_profile) = nan;
-vv(Y < max_wave_profile) = nan;
-ww(Y < max_wave_profile) = nan;
-
-uv(Y < max_wave_profile) = nan;
-uw(Y < max_wave_profile) = nan;
-vw(Y < max_wave_profile) = nan;
 
 %% Means Plots
 
 levels = 100;
 ax = figure();
-t  = tiledlayout(1,3);
+t  = tiledlayout(2,1);
 sgtitle(recording_name, 'interpreter', 'none')
 
 nexttile()
@@ -149,13 +131,6 @@ xlim([-100,100])
 colorbar()
 title('v')
 
-nexttile()
-colormap jet
-contourf(X, Y, W, levels, 'linestyle', 'none')
-axis equal
-xlim([-100,100])
-colorbar()
-title('w')
 
 clear levels
 
@@ -165,21 +140,10 @@ figure()
 plot(U(:, 200), Y(:,1))
 xlim([0, 4])
 
-%% Mean u with al waves plotted on top
-
-figure()
-hold on
-contourf(X, Y, U, 100, 'linestyle', 'none')
-for f = 1:length(frames.common)
-    plot(X(1,:), wavecrop.waves(f, :), 'color',  'black')
-end
-hold off
-axis equal
-
 %% Stresses Plots
 
 ax = figure();
-t  = tiledlayout(2,3);
+t  = tiledlayout(1,3);
 sgtitle(recording_name, 'interpreter', 'none')
 
 % Normal Stresses
@@ -199,14 +163,6 @@ xlim([-100,100])
 colorbar()
 title('vv')
 
-nexttile()
-colormap jet
-contourf(X, Y, ww, 100, 'linestyle', 'none')
-axis equal
-xlim([-100,100])
-colorbar()
-title('ww')
-
 
 % Shear Stresses
 nexttile()
@@ -216,22 +172,6 @@ axis equal
 xlim([-100,100])
 colorbar()
 title('uv')
-
-nexttile()
-colormap jet
-contourf(X, Y, uw, 100, 'linestyle', 'none')
-axis equal
-xlim([-100,100])
-colorbar()
-title('uw')
-
-nexttile()
-colormap jet
-contourf(X, Y, vw, 100, 'linestyle', 'none')
-axis equal
-xlim([-100,100])
-colorbar()
-title('vw')
 
 
 

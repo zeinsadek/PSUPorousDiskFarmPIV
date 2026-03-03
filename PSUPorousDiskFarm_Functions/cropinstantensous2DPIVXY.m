@@ -1,4 +1,4 @@
-function output = cropinstantensousPIVXY(data, out_path)
+function output = cropinstantensous2DPIVXY(data, out_path)
 
     % Load data
     D = data.D;
