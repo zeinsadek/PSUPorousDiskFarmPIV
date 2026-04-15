@@ -16,14 +16,14 @@ fprintf('All Paths Imported...\n\n')
 
 % Data paths
 clc;
-project_path   = 'E:\LeoSingleTurbine_Full';
-recording_name = 'NoTurbine_WT9';
+project_path   = 'F:\Leo_Prototype_1';
+recording_name = 'Inflow_WT6';
 
 % Image paths
-piv_path = fullfile(project_path, recording_name, 'PIV_MPd(1x32x32_50%ov_ImgCorr)_GPU');
+piv_path = fullfile(project_path, recording_name, 'PIV_MPd(1x24x24_0%ov_ImgCorr)');
 
 % Save paths
-save_path = 'E:\LeoSingleTurbineResults';
+save_path = 'F:\LeoSingleTurbineResults_Round2_April';
 paths     = savepaths(save_path, recording_name);
 
 
@@ -67,7 +67,7 @@ toc
 
 %% check
 
-f = 100;
+f = 110;
 figure()
 hold on
 contourf(crop.X, crop.Y, crop.U(:, :, f), 100, 'linestyle', 'none')

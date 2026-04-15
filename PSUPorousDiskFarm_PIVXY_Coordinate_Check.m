@@ -12,7 +12,7 @@ fprintf('All Paths Imported...\n\n')
 
 %% Paths
 
-data = readimx('E:\LeoSingleTurbine_Full\NoTurbine_WT9\PIV_MPd(1x32x32_50%ov_ImgCorr)_GPU\B00001.vc7');
+data = readimx('F:\Leo_Prototype_1\Leo_Black_10p_WT6\PIV_MPd(1x24x24_0%ov_ImgCorr)\B00001.vc7');
 
 
 %% Load Single Image
@@ -40,17 +40,24 @@ VF(VF == 0) = nan;
 
 
 % Fill holes
-UF = inpaint_nans(double(UF));
-VF = inpaint_nans(double(VF));
+% UF = inpaint_nans(double(UF));
+% VF = inpaint_nans(double(VF));
 
 
-% Trim up areas
-top_crop = 49;
-bottom_crop = -75;
-outer_left_crop = -117;
-outer_right_crop = 114;
-inner_left_crop = -71.5;
-inner_right_crop = -49;
+% % Trim up areas
+% top_crop = 49;
+% bottom_crop = -75;
+% outer_left_crop = -117;
+% outer_right_crop = 114;
+% inner_left_crop = -71.5;
+% inner_right_crop = -49;
+
+top_crop = 30;
+bottom_crop = -30;
+outer_left_crop = -10;
+outer_right_crop = 148;
+inner_left_crop = 24;
+inner_right_crop = 33;
 
 % Trim top/bottom
 UF(Y > top_crop) = nan;
@@ -68,9 +75,9 @@ VF(X > outer_right_crop) = nan;
 UF(X > inner_left_crop & X < inner_right_crop) = nan;
 VF(X > inner_left_crop & X < inner_right_crop) = nan;
 
-% Test setting turbine as origin
-x_offset = 56.122;
-y_offset = -16.788;
+% % Test setting turbine as origin
+x_offset = -28;
+y_offset = 2;
 D = 30;
 
 X = (X + x_offset) / D;
@@ -79,43 +86,46 @@ Y = (Y - y_offset) / D;
 % Plot
 clc; close all
 figure('color', 'white')
-t = tiledlayout(2,1);
-
-ax1 = nexttile();
+% t = tiledlayout(2,1);
+% 
+% ax1 = nexttile();
 contourf(X, Y, UF, 100, 'linestyle', 'none')
 axis equal
 colorbar
-colormap(ax1, "jet")
+% colormap(ax1, "jet")
+xline(0)
+yline(0)
+
 % clim([0, 4.5])
 % xlim([-100, 100])
 % ylim([-120, 100])
 
-ax2 = nexttile();
-contourf(X, Y, VF, 100, 'linestyle', 'none')
-axis equal
-colorbar
-colormap(ax2, slanCM("bwr"))
-% clim([-1,1])
-% xlim([-100, 100])
-% ylim([-120, 100])
-
-linkaxes([ax2, ax2], 'xy')
+% ax2 = nexttile();
+% contourf(X, Y, VF, 100, 'linestyle', 'none')
+% axis equal
+% colorbar
+% colormap(ax2, slanCM("bwr"))
+% % clim([-1,1])
+% % xlim([-100, 100])
+% % ylim([-120, 100])
+% 
+% linkaxes([ax2, ax2], 'xy')
 
 %% Loop over a couple images to see rough means
 
 
-inst = vector2matlab('F:\PIV\FBT_PL2_AK12_1\FBT_PL2_AK12_LM50_A\StereoPIV_MPd(2x12x12_50%ov)_GPU', 'F:\test.mat');
+inst = vector2matlab2DPIVXY('F:\Leo_Prototype_1\Leo_Black_10p_WT6\PIV_MPd(1x24x24_0%ov_ImgCorr)', 'F:\test.mat');
 
 %%
 
 u_mean = mean(inst.U, 3, 'omitnan');
 v_mean = mean(inst.V, 3, 'omitnan');
-w_mean = mean(inst.W, 3, 'omitnan');
+% w_mean = mean(inst.W, 3, 'omitnan');
 
 
 v_mean(u_mean == 0) = nan;
 w_mean(u_mean == 0) = nan;
-u_mean(u_mean == 0) = nan;
+% u_mean(u_mean == 0) = nan;
 
 
 figure()
@@ -138,15 +148,15 @@ colormap coolwarm
 clim([-0.5,0.5])
 % % xlim([-100, 100])
 % % ylim([-120, 100])
- 
-nexttile()
-contourf(-X, Y, w_mean.', 100, 'linestyle', 'none')
-axis equal
-colorbar
-colormap coolwarm
-clim([-1.5,4.5])
-xline(0)
-% xlim([-100, 100])
+% 
+% nexttile()
+% contourf(-X, Y, w_mean.', 100, 'linestyle', 'none')
+% axis equal
+% colorbar
+% colormap coolwarm
+% clim([-1.5,4.5])
+% xline(0)
+% % xlim([-100, 100])
 % ylim([-120, 100])
 
 %% Reassign to tunnel coordinates

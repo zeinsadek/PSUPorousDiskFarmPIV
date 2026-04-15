@@ -7,13 +7,23 @@ function output = cropinstantensous2DPIVXY(data, out_path)
     X = data.X;
     Y = data.Y;
 
+    %%% From first round of measurements
+    % % Trim up areas
+    % top_crop = 49;
+    % bottom_crop = -75;
+    % outer_left_crop = -117;
+    % outer_right_crop = 114;
+    % inner_left_crop = -71.5;
+    % inner_right_crop = -49;
+
+    %%% From second round of measurements
     % Trim up areas
-    top_crop = 49;
-    bottom_crop = -75;
-    outer_left_crop = -117;
-    outer_right_crop = 114;
-    inner_left_crop = -71.5;
-    inner_right_crop = -49;
+    top_crop = 30;
+    bottom_crop = -30;
+    outer_left_crop = -10;
+    outer_right_crop = 148;
+    inner_left_crop = 24;
+    inner_right_crop = 33;
 
     % Create matfile
     output = matfile(out_path, 'Writable', true);
